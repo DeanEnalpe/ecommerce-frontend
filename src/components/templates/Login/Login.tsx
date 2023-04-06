@@ -13,9 +13,11 @@ import {
   Anchor,
   Stack,
 } from "@mantine/core";
-// import { GoogleButton, TwitterButton } from '../SocialButtons/SocialButtons';
+import { GoogleButton, TwitterButton } from '../SocialButtons/SocialButtons';
+import { useState } from "react";
 
 export default function AuthenticationForm(props: PaperProps) {
+  const [data, setData] = useState([])
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
@@ -40,10 +42,11 @@ export default function AuthenticationForm(props: PaperProps) {
         Welcome to ECommerce System, {type} with
       </Text>
 
-      {/* <Group grow mb="md" mt="md">
+      <Group grow mb="md" mt="md">
         <GoogleButton radius="xl">Google</GoogleButton>
         <TwitterButton radius="xl">Twitter</TwitterButton>
-      </Group> */}
+        {/* <GmailButton radius="xl">Gmail</GmailButton> */}
+      </Group>
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
