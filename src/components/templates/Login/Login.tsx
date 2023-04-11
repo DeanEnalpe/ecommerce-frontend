@@ -18,13 +18,15 @@ import { useState } from "react";
 
 export default function AuthenticationForm(props: PaperProps) {
   const [data, setData] = useState([])
-  const [type, toggle] = useToggle(["login", "register"]);
+  const [type, toggle] = useToggle(["login", "create"]);
   const form = useForm({
     initialValues: {
+      firstName: "",
+      lastName: "",
       email: "",
-      name: "",
       password: "",
-      terms: true,
+      confirmPassword: "",
+      terms: false,
     },
 
     validate: {
@@ -52,16 +54,29 @@ export default function AuthenticationForm(props: PaperProps) {
 
       <form onSubmit={form.onSubmit(() => {})}>
         <Stack>
-          {type === "register" && (
+          {type === "create" && (
+            <Group grow mb="md" mt="md">
             <TextInput
-              label="Name"
+              required
+              label="First Name"
               placeholder="Your name"
-              value={form.values.name}
+              value={form.values.firstName}
               onChange={(event: { currentTarget: { value: string } }) =>
-                form.setFieldValue("name", event.currentTarget.value)
+                form.setFieldValue("firstname", event.currentTarget.value)
               }
               radius="md"
             />
+            <TextInput
+              required
+              label="Last Name"
+              placeholder="Your name"
+              value={form.values.lastName}
+              onChange={(event: { currentTarget: { value: string } }) =>
+                form.setFieldValue("lastname", event.currentTarget.value)
+              }
+              radius="md"
+            />
+            </Group>
           )}
 
           <TextInput
@@ -90,8 +105,9 @@ export default function AuthenticationForm(props: PaperProps) {
             }
             radius="md"
           />
+          
 
-          {type === "register" && (
+          {type === "create" && (
             <Checkbox
               label="I accept terms and conditions"
               checked={form.values.terms}
@@ -110,9 +126,9 @@ export default function AuthenticationForm(props: PaperProps) {
             onClick={() => toggle()}
             size="xs"
           >
-            {type === "register"
+            {type === "create"
               ? "Already have an account? Login"
-              : "Don't have an account? Register"}
+              : "Don't have an account? Create an Account"}
           </Anchor>
           <Button type="submit" radius="xl">
             {upperFirst(type)}
