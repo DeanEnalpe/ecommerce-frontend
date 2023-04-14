@@ -6,6 +6,7 @@ import { BrandGoogle, BrandLinkedin, BrandTwitter } from 'tabler-icons-react';
 export function GoogleButton(props: ButtonProps & React.ComponentPropsWithoutRef<'a'>) {
   return (
   <Button 
+  component='a'
   leftIcon={<BrandGoogle />} 
   variant="default" 
   color="gray" 

@@ -13,11 +13,11 @@ import {
   Anchor,
   Stack,
 } from "@mantine/core";
-import { GoogleButton, TwitterButton } from '../SocialButtons/SocialButtons';
-
+import { GoogleButton, TwitterButton } from "../SocialButtons/SocialButtons";
+import Login from "../../templates/Login/Login";
 
 export default function AuthenticationForm(props: PaperProps) {
-  const [type ] = (["Create"]);
+  const [type, toggle] = useToggle(["login", "create"]);
 
   const form = useForm({
     initialValues: {
@@ -29,32 +29,23 @@ export default function AuthenticationForm(props: PaperProps) {
       terms: false,
     },
 
-    // validate: {
-    //   email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-    //   password: (val) =>
-    //     val.length <= 6
-    //       ? "Password should include at least 6 characters"
-    //       : null,
-    // },
+    validate: {
+      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      password: (val) =>
+        val.length <= 6
+          ? "Password should include at least 6 characters"
+          : null,
+    },
   });
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
-      <Text size="lg" weight={500}>
-        Welcome to ECommerce System, {type} with
-      </Text>
-
-      <Group grow mb="md" mt="md">
-        <GoogleButton radius="xl">Google</GoogleButton>
-        <TwitterButton radius="xl">Twitter</TwitterButton>
-        {/* <GmailButton radius="xl">Gmail</GmailButton> */}
-      </Group>
-
-      <Divider label="Or continue with email" labelPosition="center" my="lg" />
-
+    <Paper radius="md" p="xl" {...props}>
       <form onSubmit={form.onSubmit(() => {})}>
         <Stack>
-          <Group grow mb="md" mt="md">
+        {/* {type === "login" && (
+          <Login />
+        )} */}
+          <Group grow mb={10} mt={-10}>
             <TextInput
               required
               label="First Name"
@@ -75,8 +66,8 @@ export default function AuthenticationForm(props: PaperProps) {
               }
               radius="md"
             />
-            </Group>
-         
+          </Group>
+
           <TextInput
             required
             label="Email"
@@ -103,7 +94,8 @@ export default function AuthenticationForm(props: PaperProps) {
             }
             radius="md"
           />
-           <PasswordInput
+
+          <PasswordInput
             required
             label="Confirm Password"
             placeholder="Your password"
@@ -118,28 +110,31 @@ export default function AuthenticationForm(props: PaperProps) {
             radius="md"
           />
 
-            <Checkbox
-              label="I accept terms and conditions"
-              checked={form.values.terms}
-              onChange={(event: { currentTarget: { checked: boolean } }) =>
-                form.setFieldValue("terms", event.currentTarget.checked)
-              }
-            />
-        
+          <Checkbox
+            label="I accept terms and conditions"
+            checked={form.values.terms}
+            onChange={(event: { currentTarget: { checked: boolean } }) =>
+              form.setFieldValue("terms", event.currentTarget.checked)
+            }
+          />
         </Stack>
 
-        <Group position="apart" mt="xl">
-          <Anchor
-            component="button"
-            type="button"
-            color="dimmed"
-            size="xs"
-          >
-          </Anchor>
-          <Button type="submit" radius="xl">
-            {upperFirst(type)}
-          </Button>
-        </Group>
+          <Group position="apart" mt="xl">
+            <Anchor
+              component="button"
+              type="button"
+              color="dimmed"
+              onClick={() => toggle()}
+              size="xs"
+            >
+              {type === "login"
+                ? "Already have an account? Login":""}
+            </Anchor>
+            <Button type="submit" radius="xl">
+              create
+            </Button>
+          </Group>
+          
       </form>
     </Paper>
   );

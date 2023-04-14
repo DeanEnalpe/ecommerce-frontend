@@ -13,20 +13,22 @@ import {
   Anchor,
   Stack,
 } from "@mantine/core";
-import { GoogleButton, TwitterButton } from '../SocialButtons/SocialButtons';
+import {
+  GoogleButton,
+  SocialButtons,
+  TwitterButton,
+} from "../SocialButtons/SocialButtons";
 import { useState } from "react";
+import CreateAccount from "../../templates/CreateAccount/CreateAccount";
 
 export default function AuthenticationForm(props: PaperProps) {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   const [type, toggle] = useToggle(["login", "create"]);
   const form = useForm({
     initialValues: {
-      firstName: "",
-      lastName: "",
       email: "",
+
       password: "",
-      confirmPassword: "",
-      terms: false,
     },
 
     validate: {
@@ -44,70 +46,47 @@ export default function AuthenticationForm(props: PaperProps) {
         Welcome to ECommerce System, {type} with
       </Text>
 
-      <Group grow mb="md" mt="md">
-        <GoogleButton radius="xl">Google</GoogleButton>
-        <TwitterButton radius="xl">Twitter</TwitterButton>
-        {/* <GmailButton radius="xl">Gmail</GmailButton> */}
-      </Group>
+      <SocialButtons />
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
-
+     
       <form onSubmit={form.onSubmit(() => {})}>
         <Stack>
-          {type === "create" && (
-            <Group grow mb="md" mt="md">
+        {type === "create" && (
+          <CreateAccount />
+        )}
+
+          {type === "login" && (
             <TextInput
               required
-              label="First Name"
-              placeholder="Your name"
-              value={form.values.firstName}
+              label="Email"
+              placeholder="ecommerce@gmail.com"
+              value={form.values.email}
               onChange={(event: { currentTarget: { value: string } }) =>
-                form.setFieldValue("firstname", event.currentTarget.value)
+                form.setFieldValue("email", event.currentTarget.value)
+              }
+              error={form.errors.email && "Invalid email"}
+              radius="md"
+            />
+          )}
+          {type === "login" && (
+            <PasswordInput
+              required
+              label="Password"
+              placeholder="Your password"
+              value={form.values.password}
+              onChange={(event: { currentTarget: { value: string } }) =>
+                form.setFieldValue("password", event.currentTarget.value)
+              }
+              error={
+                form.errors.password &&
+                "Password should include at least 6 characters"
               }
               radius="md"
             />
-            <TextInput
-              required
-              label="Last Name"
-              placeholder="Your name"
-              value={form.values.lastName}
-              onChange={(event: { currentTarget: { value: string } }) =>
-                form.setFieldValue("lastname", event.currentTarget.value)
-              }
-              radius="md"
-            />
-            </Group>
           )}
 
-          <TextInput
-            required
-            label="Email"
-            placeholder="ecommerce@gmail.com"
-            value={form.values.email}
-            onChange={(event: { currentTarget: { value: string } }) =>
-              form.setFieldValue("email", event.currentTarget.value)
-            }
-            error={form.errors.email && "Invalid email"}
-            radius="md"
-          />
-
-          <PasswordInput
-            required
-            label="Password"
-            placeholder="Your password"
-            value={form.values.password}
-            onChange={(event: { currentTarget: { value: string } }) =>
-              form.setFieldValue("password", event.currentTarget.value)
-            }
-            error={
-              form.errors.password &&
-              "Password should include at least 6 characters"
-            }
-            radius="md"
-          />
-          
-
-          {type === "create" && (
+          {/* {type === "create" && (
             <Checkbox
               label="I accept terms and conditions"
               checked={form.values.terms}
@@ -115,9 +94,9 @@ export default function AuthenticationForm(props: PaperProps) {
                 form.setFieldValue("terms", event.currentTarget.checked)
               }
             />
-          )}
+          )} */}
         </Stack>
-
+        {type === "login"&& (
         <Group position="apart" mt="xl">
           <Anchor
             component="button"
@@ -126,15 +105,17 @@ export default function AuthenticationForm(props: PaperProps) {
             onClick={() => toggle()}
             size="xs"
           >
-            {type === "create"
-              ? "Already have an account? Login"
-              : "Don't have an account? Create an Account"}
+            {type === "login"
+              ? "Don't have an account? Create an Account"
+              : "Already have an account? Login"}
           </Anchor>
           <Button type="submit" radius="xl">
-            {upperFirst(type)}
+            Login
           </Button>
         </Group>
+        )}
       </form>
+    
     </Paper>
   );
 }
